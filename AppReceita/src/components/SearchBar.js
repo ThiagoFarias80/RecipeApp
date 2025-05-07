@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, FlatList, Image, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, TextInput, FlatList, Image, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import api from '../services/api';
 import { API_KEY } from '@env';
+import { useNavigation } from '@react-navigation/native';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
   const [resultados, setResultados] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -39,28 +41,22 @@ const SearchBar = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Digite uma receita..."
-        value={query}
-        onChangeText={setQuery}
-      />
-      {loading ? (
-        <ActivityIndicator size="large" color="#6200ee" />
-      ) : (
-        <FlatList
-          data={resultados}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Image source={{ uri: item.image }} style={styles.image} />
-              <Text style={styles.title}>{item.title}</Text>
-            </View>
-          )}
-        />
+    <View style={styles.resultContainer}>
+    <FlatList
+      data={resultados}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('RecipeDetails', { id: item.id })}
+        >
+          <Image source={{ uri: item.image }} style={styles.image} />
+          <Text style={styles.title}>{item.title}</Text>
+        </TouchableOpacity>
       )}
-    </View>
+      showsVerticalScrollIndicator={false}
+    />
+  </View>  
   );
 };
 
@@ -97,6 +93,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flexShrink: 1,
   },
+  
+  resultContainer: {
+    maxHeight: 300, // controla o espaço da lista de resultados
+  },
+
 });
 
 export default SearchBar;

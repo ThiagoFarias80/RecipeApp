@@ -41,22 +41,31 @@ const SearchBar = () => {
   }
 
   return (
-    <View style={styles.resultContainer}>
-    <FlatList
-      data={resultados}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => navigation.navigate('RecipeDetails', { id: item.id })}
-        >
-          <Image source={{ uri: item.image }} style={styles.image} />
-          <Text style={styles.title}>{item.title}</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Digite uma receita..."
+        value={query}
+        onChangeText={setQuery}
+      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#6200ee" />
+      ) : (
+        <FlatList
+          data={resultados}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => navigation.navigate('RecipeDetails', { id: item.id })}
+            >
+              <Image source={{ uri: item.image }} style={styles.image} />
+              <Text style={styles.title}>{item.title}</Text>
+            </TouchableOpacity>
+          )}
+        />
       )}
-      showsVerticalScrollIndicator={false}
-    />
-  </View>  
+    </View>
   );
 };
 
@@ -93,11 +102,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flexShrink: 1,
   },
-  
-  resultContainer: {
-    maxHeight: 300, // controla o espaço da lista de resultados
-  },
-
 });
 
 export default SearchBar;

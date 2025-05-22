@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
 import SearchBar from './src/components/SearchBar';
 import Header from './src/components/Header';
 import RecipeCard from './src/components/RecipeCard';
@@ -21,17 +21,32 @@ export default function Home() {
 }
 
 function HomeScreen({ navigation }) {
+  const recommendedRecipes = [
+    { id: '1', title: 'Noodles', image: require('./assets/noodles.png') },
+    { id: '2', title: 'Pasta', image: require('./assets/pasta.png') },
+    { id: '3', title: 'Noodles', image: require('./assets/noodles.png') },
+    { id: '4', title: 'Noodles', image: require('./assets/noodles.png') },
+  ];
+
   return (
     <View style={styles.container}>
-      <Header />
-      <SearchBar /> {}
-      <Text style={styles.sectionTitle}>Recomendado</Text>
-      <View style={styles.grid}>
-        <RecipeCard title="Noodles" image={require('./assets/noodles.png')} />
-        <RecipeCard title="Pasta" image={require('./assets/pasta.png')} />
-        <RecipeCard title="Noodles" image={require('./assets/noodles.png')} />
-        <RecipeCard title="Noodles" image={require('./assets/noodles.png')} />
-      </View>
+      <FlatList
+        data={recommendedRecipes}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <>
+            <Header />
+            <SearchBar />
+            <Text style={styles.sectionTitle}>Recomendado</Text>
+          </>
+        }
+        renderItem={({ item }) => (
+          <RecipeCard title={item.title} image={item.image} />
+        )}
+        numColumns={2}
+        columnWrapperStyle={styles.grid}
+        contentContainerStyle={styles.scrollContainer}
+      />
       <StatusBar style="auto" />
     </View>
   );

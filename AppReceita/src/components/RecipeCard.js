@@ -1,45 +1,73 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-export default function RecipeCard({ title, image }) {
+const RecipeCard = ({ title, image, onPress, badge }) => {
   return (
-    <View style={styles.card}>
-      <Image source={image} style={styles.image} />
-      <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.details}>See Details</Text>
-        <Feather name="arrow-right-circle" size={16} color="#00b894" />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+      <Image 
+        source={{ uri: image || 'https://via.placeholder.com/150?text=No+Image' }} 
+        style={styles.image}
+      />
+      {badge && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{badge}</Text>
+        </View>
+      )}
+      <View style={styles.textContainer}>
+        <Text style={styles.title} numberOfLines={2}>{title}</Text>
+        <Text style={styles.detailsText}>Ver Detalhes</Text>
+      </View>
+    </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  card: {
+  container: {
     width: '48%',
-    backgroundColor: '#f9f1e9',
-    borderRadius: 16,
-    padding: 10,
     marginBottom: 16,
-    alignItems: 'center',
+    backgroundColor: '#F4E4CD',
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    position: 'relative',
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+    width: '100%',
+    height: 120,
+    resizeMode: 'cover',
+  },
+  badge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: '#419F7D',
+    borderRadius: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  badgeText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  textContainer: {
+    padding: 10,
   },
   title: {
-    fontWeight: 'bold',
     fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 4,
   },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  details: {
-    marginRight: 5,
-    color: '#636e72',
+  detailsText: {
+    fontSize: 14,
+    color: '#419F7D',
+    fontWeight: '500',
   },
 });
+
+export default RecipeCard;

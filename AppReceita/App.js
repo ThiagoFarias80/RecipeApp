@@ -1,18 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import SearchBar from './src/components/SearchBar';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import StackRoutes from './src/routes/StackRoutes';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <SearchBar />
+    <NavigationContainer>
       <StatusBar style="auto" />
-    </View>
+      <StackRoutes />
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
